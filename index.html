@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full scroll-smooth bg-slate-950">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROXY PYTHON // PEKAN ILKOMERZ 62</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Fonts: JetBrains Mono & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        cyber: {
+                            dark: '#030712',
+                            card: '#0b0f19',
+                            border: '#1e293b',
+                            neonGreen: '#10b981',
+                            neonCyan: '#06b6d4',
+                            neonRose: '#f43f5e',
+                            neonAmber: '#f59e0b',
+                            neonPurple: '#a855f7'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #030712;
+            color: #e2e8f0;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 0% 50%, rgba(168, 85, 247, 0.05) 0%, transparent 40%),
+                linear-gradient(to right, rgba(30, 41, 59, 0.2) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(30, 41, 59, 0.2) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+        }
+
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #030712; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+
+        .glass-panel {
+            background: rgba(11, 15, 25, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .cyber-card {
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.6) 0%, rgba(11, 15, 25, 0.9) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .cyber-card:hover {
+            border-color: rgba(6, 182, 212, 0.4);
+            box-shadow: 0 0 25px -5px rgba(6, 182, 212, 0.15);
+        }
+
+        /* GRID PATTERN DISPLAY FOR SECTIONS (NAVY / DARK CYAN GRID) */
+        .cyber-grid-section {
+            background-color: #030712;
+            background-image: 
+                radial-gradient(circle at 50% 30%, rgba(6, 182, 212, 0.12) 0%, transparent 65%),
+                linear-gradient(to right, rgba(56, 189, 248, 0.08) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(56, 189, 248, 0.08) 1px, transparent 1px);
+            background-size: 100% 100%, 36px 36px, 36px 36px;
+        }
+
+        /* CLEAN DARK GLASS MEMBER CARD */
+        .cyber-member-card {
+            background-color: rgba(11, 15, 25, 0.92);
+            backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+        }
+
+        /* Neon Green glow — odd cards (1st, 3rd, 5th...) */
+        #team-cards-container > div:nth-child(odd).cyber-member-card {
+            box-shadow: 0 0 20px 0px rgba(130, 255, 170, 0.3), 0 0 8px 0px rgba(130, 255, 170, 0.2);
+            border-color: rgba(130, 255, 170, 0.35) !important;
+        }
+        #team-cards-container > div:nth-child(odd).cyber-member-card:hover {
+            box-shadow: 0 0 40px 2px rgba(130, 255, 170, 0.5), 0 0 15px 0px rgba(130, 255, 170, 0.35);
+            border-color: rgba(130, 255, 170, 0.6) !important;
+        }
+
+        /* Neon Pink glow — even cards (2nd, 4th, 6th...) */
+        #team-cards-container > div:nth-child(even).cyber-member-card {
+            box-shadow: 0 0 20px 0px rgba(255, 150, 230, 0.3), 0 0 8px 0px rgba(255, 150, 230, 0.2);
+            border-color: rgba(255, 150, 230, 0.35) !important;
+        }
+        #team-cards-container > div:nth-child(even).cyber-member-card:hover {
+            box-shadow: 0 0 40px 2px rgba(255, 150, 230, 0.5), 0 0 15px 0px rgba(255, 150, 230, 0.35);
+            border-color: rgba(255, 150, 230, 0.6) !important;
+        }
+
+        .text-gradient-neon {
+            background: linear-gradient(90deg, #10b981, #06b6d4, #a855f7, #f43f5e, #f59e0b, #10b981);
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer-text 4s ease infinite;
+            filter: drop-shadow(0 0 12px rgba(6, 182, 212, 0.5)) drop-shadow(0 0 30px rgba(168, 85, 247, 0.3));
+        }
+
+        @keyframes shimmer-text {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* PJ Proxy Python card glow */
+        #initiative-lead-container .cyber-card {
+            box-shadow: 0 0 25px 0px rgba(130, 255, 170, 0.25), 0 0 25px 0px rgba(255, 150, 230, 0.25), 0 0 15px 0px rgba(6, 182, 212, 0.2);
+            border-color: rgba(168, 85, 247, 0.3) !important;
+            animation: card-glow 4s ease infinite;
+        }
+
+        @keyframes card-glow {
+            0%, 100% {
+                box-shadow: 0 0 25px 0px rgba(130, 255, 170, 0.3), 0 0 15px 0px rgba(255, 150, 230, 0.15), 0 0 10px 0px rgba(6, 182, 212, 0.1);
+                border-color: rgba(130, 255, 170, 0.35) !important;
+            }
+            33% {
+                box-shadow: 0 0 25px 0px rgba(255, 150, 230, 0.3), 0 0 15px 0px rgba(6, 182, 212, 0.15), 0 0 10px 0px rgba(168, 85, 247, 0.1);
+                border-color: rgba(255, 150, 230, 0.35) !important;
+            }
+            66% {
+                box-shadow: 0 0 25px 0px rgba(6, 182, 212, 0.3), 0 0 15px 0px rgba(168, 85, 247, 0.15), 0 0 10px 0px rgba(130, 255, 170, 0.1);
+                border-color: rgba(6, 182, 212, 0.35) !important;
+            }
+        }
+
+        /* Glowing blue screen borders — left & right */
+        .screen-glow-left,
+        .screen-glow-right {
+            position: fixed;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            z-index: 50;
+            pointer-events: none;
+            background: rgba(56, 189, 248, 0.6);
+            box-shadow: 0 0 8px 2px rgba(56, 189, 248, 0.5),
+                         0 0 20px 4px rgba(56, 189, 248, 0.3),
+                         0 0 40px 8px rgba(56, 189, 248, 0.15);
+            animation: border-pulse 3s ease-in-out infinite;
+        }
+        .screen-glow-left { left: 0; }
+        .screen-glow-right { right: 0; }
+
+        @keyframes border-pulse {
+            0%, 100% { opacity: 0.7; box-shadow: 0 0 8px 2px rgba(56, 189, 248, 0.5), 0 0 20px 4px rgba(56, 189, 248, 0.3), 0 0 40px 8px rgba(56, 189, 248, 0.15); }
+            50% { opacity: 1; box-shadow: 0 0 12px 3px rgba(56, 189, 248, 0.7), 0 0 30px 6px rgba(56, 189, 248, 0.4), 0 0 60px 12px rgba(56, 189, 248, 0.2); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-sky-500 selection:text-white">
+
+    <!-- Glowing Blue Screen Borders -->
+    <div class="screen-glow-left"></div>
+    <div class="screen-glow-right"></div>
+
+    <header class="sticky top-0 z-40 w-full glass-panel border-b border-slate-800/80 px-4 lg:px-8 py-3">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+            
+            <!-- LOGO & BRANDING -->
+            <div class="flex items-center gap-3">
+                <a href="#" class="flex items-center gap-2.5 group">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-sky-400 via-purple-500 to-rose-500 p-0.5 shadow-lg shadow-sky-500/20 group-hover:scale-105 transition">
+                        <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+                            <i data-lucide="terminal" class="w-5 h-5 text-sky-400"></i>
+                        </div>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-mono text-sm font-extrabold tracking-wider text-white flex items-center gap-1.5">
+                            PROXY_PYTHON
+                        </span>
+                        <span class="text-[10px] font-mono text-slate-400">PEKAN ILKOMERZ 62</span>
+                    </div>
+                </a>
+
+                <!-- NODE LOCATION BADGE -->
+                <div class="hidden xl:flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/80 border border-slate-800 text-[11px] font-mono text-slate-300 ml-4">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>IPB University</span>
+                </div>
+            </div>
+
+            <!-- DESKTOP NAVIGATION LINKS -->
+            <nav class="hidden md:flex items-center gap-6 text-xs font-mono">
+                <button onclick="openAboutModal()" class="text-slate-300 hover:text-sky-400 transition py-1">
+                    About Us
+                </button>
+                <a href="#team-section" class="text-slate-300 hover:text-sky-400 transition flex items-center gap-1.5 py-1">
+                    <span>Team</span>
+                    <span class="px-1.5 py-0.5 rounded-full bg-sky-500/20 text-sky-400 text-[10px] font-bold">11</span>
+                </a>
+                <a href="#gallery-section" class="text-slate-300 hover:text-sky-400 transition py-1">
+                    Activity Documentation
+                </a>
+            </nav>
+
+            <!-- RIGHT CTA BUTTON: GITHUB REPOSITORY -->
+            <div class="flex items-center gap-3">
+                <a href="https://github.com/Raiserss/proxy-python-website" 
+                   target="_blank" 
+                   rel="noopener noreferrer" 
+                   class="flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-full bg-gradient-to-r from-rose-500 via-purple-500 to-emerald-400 text-white font-mono text-xs font-bold hover:opacity-90 shadow-lg shadow-purple-500/20 transition duration-300 transform hover:scale-[1.02]">
+                    <svg class="w-4 h-4 fill-current text-white shrink-0" viewBox="0 0 24 24">
+                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                    </svg>
+                    <span class="hidden sm:inline">Repository</span>
+                    <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+                </a>
+
+                <!-- MOBILE MENU TOGGLE BUTTON -->
+                <button id="mobile-menu-btn" aria-label="Toggle Navigation Menu" class="md:hidden text-slate-300 hover:text-white p-2.5 rounded-xl bg-slate-900 border border-slate-800 transition">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- MOBILE MENU OVERLAY -->
+        <div id="mobile-menu" class="hidden md:hidden pt-4 pb-2 border-t border-slate-800/80 mt-3 font-mono text-xs space-y-2">
+            <button onclick="openAboutModal(); toggleMobileMenu();" class="block w-full text-left py-2 px-3 text-slate-300 hover:bg-slate-900 rounded">About Us</button>
+            <a href="#team-section" onclick="toggleMobileMenu()" class="block w-full text-left py-2 px-3 text-slate-300 hover:bg-slate-900 rounded flex items-center justify-between">
+                <span>Team Collective</span>
+                <span class="px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-400 font-bold">11</span>
+            </a>
+            <a href="#gallery-section" onclick="toggleMobileMenu()" class="block w-full text-left py-2 px-3 text-slate-300 hover:bg-slate-900 rounded">Activity Documentation</a>
+        </div>
+    </header>
+
+    <section class="relative pt-10 pb-14 px-4 lg:px-8 overflow-hidden">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+            
+            <!-- LEFT COLUMN: HEADLINE & ACTIONS -->
+            <div class="lg:col-span-7 space-y-6">
+                
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-sky-500/10 border border-sky-500/30 text-sky-400 text-xs font-mono font-semibold">
+                    <span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
+                    <span>PROXY PYTHON INITIATIVE</span>
+                </div>
+
+                <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight font-sans">
+                    <span class="text-gradient-neon">Meet Proxy Python</span> Our Journey Starts Here
+                </h1>
+
+                <p class="text-slate-400 text-sm sm:text-base leading-relaxed max-w-2xl">
+                    Proxy Python bukan sekadar nama kelompok, tetapi menjadi bagian dari perjalanan kami dalam mengenal satu sama lain dan menjalani setiap proses bersama.
+                </p>
+
+                <!-- ACTION BUTTONS -->
+                <div class="flex flex-wrap items-center gap-4 pt-2 font-mono text-xs">
+                    <a href="#team-section" class="px-6 py-3 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold flex items-center gap-2 shadow-lg shadow-sky-500/25 transition">
+                        <span>Meet Proxy Collective</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                    <button onclick="openAboutModal()" class="px-6 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 font-bold flex items-center gap-2 transition">
+                        <i data-lucide="book-open" class="w-4 h-4 text-sky-400"></i>
+                        <span>View Documentation</span>
+                    </button>
+                </div>
+
+                <!-- METRICS GRID -->
+                <div class="grid grid-cols-3 gap-4 pt-6 border-t border-slate-800/80 font-mono">
+                    <div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-white">10</div>
+                        <div class="text-[11px] text-slate-400 uppercase tracking-wider mt-0.5">Active Members</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-amber-400">11</div>
+                        <div class="text-[11px] text-slate-400 uppercase tracking-wider mt-0.5">Total Members</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-emerald-400">100%</div>
+                        <div class="text-[11px] text-slate-400 uppercase tracking-wider mt-0.5">Solidarity</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RIGHT COLUMN: FEATURED INITIATIVE LEAD CARD -->
+            <div class="lg:col-span-5" id="initiative-lead-container">
+                <!-- Diisi otomatis oleh main.js dari data.js -->
+            </div>
+        </div>
+    </section>
+
+    <section id="team-section" class="py-14 px-4 lg:px-8 border-t border-slate-800/80 cyber-grid-section relative">
+        <div class="max-w-7xl mx-auto space-y-8">
+            
+            <!-- SECTION HEADER & CATEGORY FILTERS -->
+            <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 border-b border-slate-800 pb-6">
+                <div class="space-y-2">
+                    <div class="text-xs font-mono text-sky-400 font-semibold flex items-center gap-2">
+                        <i data-lucide="users" class="w-4 h-4"></i>
+                        <span>PROXY PYTHON CORE ROSTER</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold text-white font-sans">
+                        Meet the Proxy Python Collective
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-400 max-w-xl font-sans">
+                        Daftar lengkap anggota Proxy Python dengan foto profil, biodata ringkas, media sosial, dan akses langsung CV ATS.
+                    </p>
+                </div>
+
+                <!-- CATEGORY FILTER BUTTONS BAR -->
+                <div id="team-filter-container" class="inline-flex flex-wrap items-center gap-1 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800">
+                    
+                </div>
+            </div>
+
+            <!-- TEAM CARDS GRID CONTAINER (FEATURING NAVY GRID BACKGROUND PATTERN) -->
+            <div id="team-cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Dynamically populated by JS -->
+            </div>
+
+        </div>
+    </section>
+
+    <section id="gallery-section" class="py-14 px-4 lg:px-8 border-t border-slate-800/80 cyber-grid-section relative">
+        <div class="max-w-7xl mx-auto space-y-6">
+            
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-slate-800 pb-4">
+                <div class="space-y-1">
+                    <div class="text-xs font-mono text-amber-400 font-semibold flex items-center gap-2">
+                        <i data-lucide="camera" class="w-4 h-4"></i>
+                        <span>FIELD NOTES & RESEARCH SHOWCASE</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white font-sans">
+                        Activity Documentation
+                    </h2>
+                </div>
+
+                <!-- SLIDER CONTROLS & PAGINATION INDICATOR -->
+                <div class="flex items-center gap-3 font-mono text-xs">
+                    <span id="gallery-counter" class="text-slate-400">Slide 1 / 6</span>
+                    <div class="flex items-center gap-2">
+                        <button onclick="prevGallerySlide()" aria-label="Previous Slide" class="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-sky-400 transition">
+                            <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                        </button>
+                        <button onclick="nextGallerySlide()" aria-label="Next Slide" class="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-sky-400 transition">
+                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COMPACT HERO SLIDER CONTAINER -->
+            <div class="cyber-card rounded-2xl overflow-hidden relative border border-slate-800 min-h-[380px] sm:min-h-[420px] flex flex-col justify-end">
+                
+                <!-- BACKGROUND SLIDE IMAGE -->
+                <img id="carousel-bg-image" src="" alt="Documentation Preview" class="absolute inset-0 w-full h-full object-cover transition-all duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/20"></div>
+
+                <!-- SLIDE OVERLAY CONTENT -->
+                <div class="relative z-10 p-6 sm:p-8 space-y-4 max-w-3xl">
+                    <div class="flex flex-wrap items-center gap-2.5">
+                        <span id="carousel-tag" class="px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-400 text-[10px] font-mono font-bold uppercase tracking-wider">
+                            ● IPB University
+                        </span>
+                        <span class="px-3 py-1 rounded-full bg-slate-900/80 border border-slate-700 text-slate-300 text-[10px] font-mono">
+                            Pekan Ilkomerz 62
+                        </span>
+                    </div>
+
+                    <div class="space-y-2">
+                        <h3 id="carousel-title" class="text-xl sm:text-3xl font-extrabold text-white font-sans tracking-tight">
+                            Loading Documentation Title...
+                        </h3>
+                        <p id="carousel-desc" class="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans max-w-2xl">
+                            Loading documentation details and event context...
+                        </p>
+                    </div>
+
+                    <div class="pt-2 flex flex-wrap items-center gap-4">
+                        <button id="carousel-zoom-btn" onclick="" class="px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-mono text-xs font-bold flex items-center gap-2 transition">
+                            <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i>
+                            <span>Perbesar Foto</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- BOTTOM-RIGHT THUMBNAILS BAR -->
+                <div id="carousel-thumbnails-bar" class="absolute bottom-4 right-4 z-20 hidden md:flex items-center gap-2 bg-slate-950/80 p-1.5 rounded-xl border border-slate-800 backdrop-blur-md">
+                    <!-- Dynamic Thumbnails inserted via JS -->
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="bg-slate-950 border-t border-slate-800/80 pt-10 pb-8 px-4 lg:px-8 font-mono text-xs">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 pb-10 border-b border-slate-800/80">
+            
+            <!-- LEFT BRAND COL -->
+            <div class="lg:col-span-5 space-y-3">
+                <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 rounded-lg bg-sky-500 p-0.5 flex items-center justify-center text-slate-950 font-bold">
+                        <i data-lucide="terminal" class="w-4 h-4"></i>
+                    </div>
+                    <span class="font-extrabold text-white text-sm">PROXY_PYTHON</span>
+                </div>
+                <p class="text-slate-400 font-sans text-xs leading-relaxed max-w-sm">
+                    No Error! <br>
+                    No Ragu!! <br>
+                    Gas Terus!!
+                </p>
+                <div class="text-[11px] text-slate-400 space-y-1 pt-1">
+                    <p><strong class="text-amber-400">BASE LOCATION:</strong> Dramaga, Bogor</p>
+                </div>
+            </div>
+
+            <!-- NAV COL -->
+            <div class="lg:col-span-3 space-y-3">
+                <span class="text-sky-400 font-bold uppercase tracking-wider text-[11px]">NAVIGATION</span>
+                <ul class="space-y-2 text-slate-400 font-sans text-xs">
+                    <li><a href="#team-section" class="hover:text-white transition">Core Collective (11)</a></li>
+                    <li><a href="#gallery-section" class="hover:text-white transition">Activity Documentation</a></li>
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- BOTTOM STATUS BAR -->
+        <div class="max-w-7xl mx-auto pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-400 text-[11px]">
+            <div>
+                © 2026 Proxy Python Collective. All rights reserved.
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="https://github.com/Raiserss/proxy-python-website" target="_blank" rel="noopener noreferrer" class="hover:text-sky-400 flex items-center gap-1 transition">
+                    <i data-lucide="git-branch" class="w-3.5 h-3.5 text-sky-400"></i>
+                    <span>main*</span>
+                </a>
+                <span>•</span>
+                <span>HTML5 • Tailwind • Vercel Ready</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ABOUT US MODAL -->
+    <div id="about-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="cyber-card rounded-2xl w-full max-w-3xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden border border-slate-800">
+            <div class="p-4 bg-slate-950 border-b border-slate-800 flex justify-between items-center font-mono text-xs">
+                <span class="text-sky-400 font-bold">// MANIFESTO & OVERVIEW</span>
+                <button onclick="closeAboutModal()" aria-label="Close Modal" class="text-slate-400 hover:text-white p-1 rounded hover:bg-slate-800 transition">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto space-y-6 font-sans">
+                <div class="space-y-3">
+                    <h3 class="text-xl font-bold text-white font-mono flex items-center gap-2">
+                        <span class="text-sky-400">#</span> Global Collective Manifesto
+                    </h3>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        Kami merupakan tim mahasiswa Ilmu komputer yang berdiri sejak dimulainya Pekan Ilkomerz 
+                        62. Tujuan kami adalah untuk melaksanakan PI 62 sebaik mungkin.
+                    </p>
+                </div>
+            </div>
+            <div class="p-4 bg-slate-950 border-t border-slate-800 flex justify-end">
+                <button onclick="closeAboutModal()" class="px-5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-mono text-xs font-bold transition">Close Window</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CV ATS PREVIEW MODAL -->
+    <div id="cv-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="cyber-card rounded-2xl w-full max-w-4xl h-[85vh] flex flex-col shadow-2xl overflow-hidden border border-slate-800">
+            <div class="p-3 bg-slate-950 border-b border-slate-800 flex justify-between items-center font-mono text-xs">
+                <span id="cv-modal-title" class="text-sky-400 font-bold flex items-center gap-2">
+                    <i data-lucide="file-text" class="w-4 h-4"></i> CV ATS Preview
+                </span>
+                <button onclick="closeCvModal()" aria-label="Close CV Modal" class="text-slate-400 hover:text-white p-1 rounded hover:bg-slate-800 transition">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="flex-1 bg-slate-950 relative">
+                <iframe id="cv-iframe" src="" class="w-full h-full border-0"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- IMAGE LIGHTBOX MODAL -->
+    <div id="image-modal" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="cyber-card rounded-2xl max-w-3xl w-full flex flex-col overflow-hidden shadow-2xl border border-slate-800">
+            <div class="p-3 bg-slate-950 border-b border-slate-800 flex justify-between items-center font-mono text-xs">
+                <span id="image-modal-title" class="text-amber-400 font-bold flex items-center gap-2">
+                    <i data-lucide="image" class="w-4 h-4"></i> Pratinjau Foto
+                </span>
+                <button onclick="closeImageModal()" aria-label="Close Image Modal" class="text-slate-400 hover:text-white p-1 rounded hover:bg-slate-800 transition">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="p-4 space-y-3">
+                <img id="image-modal-src" src="" alt="" class="w-full max-h-[65vh] object-contain rounded-lg border border-slate-800 bg-slate-950">
+                <p id="image-modal-desc" class="text-xs font-mono text-slate-400 bg-slate-950 p-3 rounded-lg border border-slate-800/80"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Files -->
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
